@@ -29,7 +29,7 @@ export default function Navbar() {
               </>
             )}
             <span className="muted" style={{ marginLeft: 8 }}>
-              Hi, {user?.name} ({role})
+              Hi, {user?.name}
             </span>
             <button className="btn" style={{ marginLeft: 8 }} onClick={logout}>
               Logout

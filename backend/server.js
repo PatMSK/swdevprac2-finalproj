@@ -19,7 +19,17 @@ const cors = require("cors");
 dotenv.config({ path: "./config/config.env" });
 
 // Connect to database
-connectDB();
+connectDB()
+  .then(() => {
+    // Lazy-load seed function to avoid circular requires
+    try {
+      const seedUsers = require("./seeds/seedUsers");
+      seedUsers();
+    } catch (err) {
+      console.error("Failed to run DB seed:", err.message);
+    }
+  })
+  .catch((err) => console.error("DB connection error:", err && err.message));
 
 const app = express();
 
