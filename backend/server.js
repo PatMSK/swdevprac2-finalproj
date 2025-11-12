@@ -23,6 +23,12 @@ connectDB();
 
 const app = express();
 
+// CORS configuration
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:3000',
+  credentials: true
+}));
+
 // Security middleware
 app.use(helmet());
 app.use(xss());
@@ -48,12 +54,6 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Cookie parser
 app.use(cookieParser());
-
-// CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : 'http://localhost:3000',
-  credentials: true
-}));
 
 // API routes
 app.use("/api/v1/auth", auth);
