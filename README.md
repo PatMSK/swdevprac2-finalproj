@@ -7,7 +7,7 @@
 
 ### Additional features / effort estimate (example)
 - [ ] CRUD pages/components
-- [ ] Search & Filter UI
+- [X] Search & Filter UI
 - [X] Light/Dark theming
 - [ ] User profile page
 - [ ] Responsive layout work
@@ -35,5 +35,6 @@ Notes
 - The backend seeds these users when the users collection is empty (see `backend/seeds/seedUsers.js`). Passwords are hashed by the User model pre-save hook.
 - Public registration on the frontend no longer allows selecting role; the server enforces `role: 'member'` for public signups.
 
-### Should I implement some logic for this?
-- The exhibition page if booking it will remove but if remove it not add back so logic may mismatch
+### TODO by peace
+- The exhibition page if booking it will subtract but if delete the bookings it not add back so logic may mismatch
+- When user booking and it error this routing to next page. want to have error message
