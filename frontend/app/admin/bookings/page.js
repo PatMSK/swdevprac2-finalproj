@@ -53,8 +53,8 @@ export default function AdminBookingsPage() {
                   <td>{b.boothType}</td>
                   <td>{b.amount}</td>
                   <td>
-                    {/* Admin can edit via member-like page if desired; here we only delete for brevity */}
-                    <button className="btn btn-danger" onClick={() => remove(b._id)}>Delete</button>
+                    <a className="btn" href={`/bookings/${b._id}`}>Edit</a>
+                    <button className="btn btn-danger" onClick={() => remove(b._id)} style={{marginLeft: 8}}>Delete</button>
                   </td>
                 </tr>
               ))}
