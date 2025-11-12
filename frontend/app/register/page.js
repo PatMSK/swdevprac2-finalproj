@@ -6,6 +6,7 @@ import { useAuth } from "../../lib/AuthContext";
 export default function RegisterPage() {
   const router = useRouter();
   const { register, setError, error } = useAuth();
+  // Keep role fixed to 'member' on the client — admin assignment must be done server-side by admins only
   const [form, setForm] = useState({ name: "", email: "", tel: "", role: "member", password: "" });
   const [busy, setBusy] = useState(false);
 
@@ -37,13 +38,7 @@ export default function RegisterPage() {
           <label>Tel</label>
           <input value={form.tel} onChange={e=>setForm({...form, tel:e.target.value})} required />
         </div>
-        <div className="field">
-          <label>Role</label>
-          <select value={form.role} onChange={e=>setForm({...form, role:e.target.value})}>
-            <option value="member">member</option>
-            <option value="admin">admin</option>
-          </select>
-        </div>
+        {/* Role is fixed to 'member' for public registration — removed ability to request admin */}
         <div className="field">
           <label>Password</label>
           <input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} required />
