@@ -10,7 +10,7 @@
 - [X] Search & Filter UI
 - [X] Light/Dark theming
 - [ ] User profile page
-- [ ] Responsive layout work
+- [X] Responsive layout work
 - [ ] Special UI or polish per screen
 
 ### Default users (for development)

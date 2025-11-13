@@ -76,32 +76,33 @@ export default function AdminExhibitionsPage() {
         </form>
 
         <div className="panel">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Venue</th>
-                <th>Start</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(ex => (
-                <tr key={ex._id}>
-                  <td>{ex.name}</td>
-                  <td>{ex.venue}</td>
-                  <td>{new Date(ex.startDate).toLocaleDateString()}</td>
-                  <td>
-                    <Link className="btn" href={`/admin/exhibitions/${ex._id}`}>Edit</Link>
-                    <button className="btn btn-danger" onClick={() => remove(ex._id)} style={{marginLeft: 8}}>Delete</button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Venue</th>
+                  <th>Start</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {items.map(ex => (
+                  <tr key={ex._id}>
+                    <td>{ex.name}</td>
+                    <td>{ex.venue}</td>
+                    <td>{new Date(ex.startDate).toLocaleDateString()}</td>
+                    <td>
+                      <Link className="btn" href={`/admin/exhibitions/${ex._id}`}>Edit</Link>
+                      <button className="btn btn-danger" onClick={() => remove(ex._id)} style={{marginLeft: 8}}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </Protected>
   );
 }
-

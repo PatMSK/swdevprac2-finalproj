@@ -18,7 +18,7 @@ export default function LoginPage() {
       await login(email, password);
       router.push("/exhibitions");
     } catch (err) {
-      setError(err.message);
+      setError("Invalid email or password");
     } finally { setBusy(false); }
   };
 
@@ -40,4 +40,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
