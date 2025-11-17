@@ -13,12 +13,13 @@ export default function ThemeToggle() {
 
   return (
     <button
-      className="theme-toggle btn"
+      type="button"
+      className="theme-toggle"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label="Toggle theme"
-      // style={{ marginLeft: 12 }}
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      {isDark ? "🌙 Dark" : "☀️ Light"}
+      <span aria-hidden>{isDark ? "🌙" : "☀️"}</span>
+      <span className="theme-toggle-label">{isDark ? "Dark" : "Light"}</span>
     </button>
   );
 }

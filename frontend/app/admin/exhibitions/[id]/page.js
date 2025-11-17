@@ -56,20 +56,32 @@ export default function AdminEditExhibitionPage() {
 
   return (
     <Protected role={"admin"}>
-      <form className="panel grid" onSubmit={onSubmit}>
-        <h2 style={{gridColumn: "1/-1"}}>Edit Exhibition</h2>
-        <div className="field"><label>Name</label><input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} required /></div>
-        <div className="field"><label>Venue</label><input value={form.venue} onChange={e=>setForm({...form, venue:e.target.value})} required /></div>
-        <div className="field" style={{gridColumn: "1/-1"}}><label>Description</label><textarea rows={3} value={form.description} onChange={e=>setForm({...form, description:e.target.value})} required /></div>
-        <div className="field"><label>Start Date</label><input type="date" value={form.startDate} onChange={e=>setForm({...form, startDate:e.target.value})} required /></div>
-        <div className="field"><label>Duration (days)</label><input type="number" min={1} value={form.durationDay} onChange={e=>setForm({...form, durationDay:e.target.value})} /></div>
-        <div className="field"><label>Small Booth Quota</label><input type="number" min={0} value={form.smallBoothQuota} onChange={e=>setForm({...form, smallBoothQuota:e.target.value})} /></div>
-        <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
-        <div className="field" style={{gridColumn: "1/-1"}}><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
-        {error && <div className="error" style={{gridColumn: "1/-1"}}>{error}</div>}
-        <div style={{gridColumn: "1/-1"}}><button className="btn btn-accent" disabled={busy}>{busy?"Saving...":"Save"}</button></div>
-      </form>
+      <div className="page-shell" style={{ paddingTop: 12 }}>
+        <form className="card col" style={{ gap: 12 }} onSubmit={onSubmit}>
+          <div className="card-header">
+            <div>
+              <h2 style={{ margin: 0 }}>Edit exhibition</h2>
+              <p className="card-subtitle">Update timing, quotas, and description.</p>
+            </div>
+          </div>
+          <div className="form-split">
+            <div className="field"><label>Name</label><input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} required /></div>
+            <div className="field"><label>Venue</label><input value={form.venue} onChange={e=>setForm({...form, venue:e.target.value})} required /></div>
+          </div>
+          <div className="field"><label>Description</label><textarea rows={3} value={form.description} onChange={e=>setForm({...form, description:e.target.value})} required /></div>
+          <div className="form-split">
+            <div className="field"><label>Start Date</label><input type="date" value={form.startDate} onChange={e=>setForm({...form, startDate:e.target.value})} required /></div>
+            <div className="field"><label>Duration (days)</label><input type="number" min={1} value={form.durationDay} onChange={e=>setForm({...form, durationDay:e.target.value})} /></div>
+          </div>
+          <div className="form-split">
+            <div className="field"><label>Small Booth Quota</label><input type="number" min={0} value={form.smallBoothQuota} onChange={e=>setForm({...form, smallBoothQuota:e.target.value})} /></div>
+            <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
+          </div>
+          <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
+          {error && <div className="error">{error}</div>}
+          <div className="pill-actions" style={{ justifyContent: "flex-end" }}><button className="btn cta-primary" disabled={busy}>{busy?"Saving...":"Save changes"}</button></div>
+        </form>
+      </div>
     </Protected>
   );
 }
-
