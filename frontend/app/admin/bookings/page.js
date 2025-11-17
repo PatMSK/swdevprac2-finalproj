@@ -30,11 +30,19 @@ export default function AdminBookingsPage() {
 
   return (
     <Protected role={"admin"}>
-      <div className="col" style={{gap: 16}}>
-        <h2>Admin: Bookings</h2>
-        {loading && <div className="panel">Loading...</div>}
+      <div className="page-shell">
+        <section className="page-hero">
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h2 style={{ marginBottom: 6 }}>Admin: Bookings</h2>
+              <p className="muted" style={{ margin: 0 }}>Audit and manage all booth reservations.</p>
+            </div>
+            <div className="badge">Total: {items.length}</div>
+          </div>
+        </section>
+        {loading && <div className="card">Loading...</div>}
         {error && <div className="error">{error}</div>}
-        <div className="panel">
+        <div className="card table-card">
           <div className="table-responsive">
             <table className="table">
               <thead>
@@ -43,7 +51,7 @@ export default function AdminBookingsPage() {
                   <th>Exhibition</th>
                   <th>Type</th>
                   <th>Amount</th>
-                  <th>Actions</th>
+                  <th style={{ textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -53,9 +61,11 @@ export default function AdminBookingsPage() {
                     <td>{b.exhibition?.name}</td>
                     <td>{b.boothType}</td>
                     <td>{b.amount}</td>
-                    <td>
-                      <a className="btn" href={`/bookings/${b._id}`}>Edit</a>
-                      <button className="btn btn-danger" onClick={() => remove(b._id)} style={{marginLeft: 8}}>Delete</button>
+                    <td style={{ textAlign: "right" }}>
+                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
+                        <a className="btn" href={`/bookings/${b._id}`}>Edit</a>
+                        <button className="btn btn-danger" onClick={() => remove(b._id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -67,4 +77,3 @@ export default function AdminBookingsPage() {
     </Protected>
   );
 }
-

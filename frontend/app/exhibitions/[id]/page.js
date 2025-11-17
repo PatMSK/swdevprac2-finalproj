@@ -44,41 +44,63 @@ export default function ExhibitionDetailPage() {
   if (!data) return <div className="panel">Not found</div>;
 
   return (
-    <div className="col" style={{gap: 16}}>
-      <div className="panel col">
-        <h2>{data.name}</h2>
-        <div className="muted">{data.venue}</div>
-        <div className="muted">Start: {new Date(data.startDate).toLocaleDateString()} · {data.durationDay} day(s)</div>
-        <p>{data.description}</p>
-        <div className="row" style={{gap: 24}}>
-          <div>Small quota: {data.smallBoothQuota}</div>
-          <div>Big quota: {data.bigBoothQuota}</div>
+    <div className="page-shell">
+      <section className="page-hero">
+        <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <h2 style={{ marginBottom: 6 }}>{data.name}</h2>
+            <p className="muted" style={{ margin: 0 }}>{data.venue}</p>
+          </div>
+          <span className="badge tag-muted">{new Date(data.startDate).toLocaleDateString()}</span>
         </div>
+        <div className="section-grid" style={{ marginTop: 12 }}>
+          <div className="stat-card">
+            <div className="muted">Duration</div>
+            <strong>{data.durationDay} day(s)</strong>
+          </div>
+          <div className="stat-card">
+            <div className="muted">Small booths</div>
+            <strong>{data.smallBoothQuota}</strong>
+          </div>
+          <div className="stat-card">
+            <div className="muted">Big booths</div>
+            <strong>{data.bigBoothQuota}</strong>
+          </div>
+        </div>
+      </section>
+
+      <div className="card">
+        <h3 style={{ marginTop: 0 }}>About this exhibition</h3>
+        <p style={{ marginBottom: 0 }}>{data.description}</p>
       </div>
 
       {role === "member" && (
-        <form onSubmit={submitBooking} className="panel col" style={{gap: 12}}>
-          <h3>Create Booking</h3>
-          <div className="row" style={{gap: 16}}>
-            <div className="field" style={{minWidth: 180}}>
+        <form onSubmit={submitBooking} className="card col" style={{ gap: 12 }}>
+          <div className="card-header">
+            <div>
+              <h3 className="card-title">Create booking</h3>
+              <p className="card-subtitle">Choose your booth type and amount.</p>
+            </div>
+          </div>
+          <div className="form-split">
+            <div className="field">
               <label>Booth Type</label>
               <select value={booking.boothType} onChange={e=>setBooking({...booking, boothType:e.target.value})}>
                 <option value="small">small</option>
                 <option value="big">big</option>
               </select>
             </div>
-            <div className="field" style={{minWidth: 180}}>
+            <div className="field">
               <label>Amount</label>
               <input type="number" min={1} value={booking.amount} onChange={e=>setBooking({...booking, amount:e.target.value})} />
             </div>
           </div>
           {error && <div className="error">{error}</div>}
-          <div>
-            <button className="btn btn-accent" disabled={busy}>{busy?"Submitting...":"Create Booking"}</button>
+          <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
+            <button className="btn cta-primary" disabled={busy}>{busy?"Submitting...":"Create booking"}</button>
           </div>
         </form>
       )}
     </div>
   );
 }
-

@@ -34,11 +34,26 @@ export default function MyBookingsPage() {
 
   return (
     <Protected role={"member"}>
-      <div className="col" style={{gap: 16}}>
-        <h2>My Bookings</h2>
-        {loading && <div className="panel">Loading...</div>}
+      <div className="page-shell">
+        <section className="page-hero">
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h2 style={{ marginBottom: 6 }}>My Bookings</h2>
+              <p className="muted" style={{ margin: 0 }}>Track and manage your booth reservations.</p>
+            </div>
+          </div>
+          <div className="section-grid" style={{ marginTop: 12 }}>
+            <div className="stat-card">
+              <div className="muted">Active bookings</div>
+              <strong>{items.length}</strong>
+            </div>
+          </div>
+        </section>
+
+        {loading && <div className="card">Loading...</div>}
         {error && <div className="error">{error}</div>}
-        <div className="panel">
+
+        <div className="card table-card">
           <div className="table-responsive">
             <table className="table">
               <thead>
@@ -46,7 +61,7 @@ export default function MyBookingsPage() {
                   <th>Exhibition</th>
                   <th>Booth Type</th>
                   <th>Amount</th>
-                  <th>Actions</th>
+                  <th style={{ textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,9 +70,11 @@ export default function MyBookingsPage() {
                     <td>{b.exhibition?.name}</td>
                     <td>{b.boothType}</td>
                     <td>{b.amount}</td>
-                    <td>
-                      <Link className="btn" href={`/bookings/${b._id}`}>Edit</Link>
-                      <button className="btn btn-danger" onClick={() => remove(b._id)} style={{marginLeft: 8}}>Delete</button>
+                    <td style={{ textAlign: "right" }}>
+                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
+                        <Link className="btn" href={`/bookings/${b._id}`}>Edit</Link>
+                        <button className="btn btn-danger" onClick={() => remove(b._id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -47,26 +47,35 @@ export default function EditBookingPage() {
 
   return (
     <Protected>
-      <div className="panel col" style={{gap: 12, maxWidth: 520}}>
-        <h2>Edit Booking</h2>
-        <div className="muted">Exhibition: {data.exhibition?.name}</div>
-        <form onSubmit={onSubmit} className="col" style={{gap: 12}}>
-          <div className="field">
-            <label>Booth Type</label>
-            <select value={form.boothType} onChange={e=>setForm({...form, boothType:e.target.value})}>
-              <option value="small">small</option>
-              <option value="big">big</option>
-            </select>
+      <div className="page-shell" style={{ paddingTop: 12 }}>
+        <div className="card col" style={{ gap: 12, maxWidth: 580 }}>
+          <div className="card-header">
+            <div>
+              <h2 style={{ margin: 0 }}>Edit booking</h2>
+              <p className="card-subtitle">Exhibition: {data.exhibition?.name}</p>
+            </div>
           </div>
-          <div className="field">
-            <label>Amount</label>
-            <input type="number" min={1} value={form.amount} onChange={e=>setForm({...form, amount:e.target.value})} />
-          </div>
-          {error && <div className="error">{error}</div>}
-          <button className="btn btn-accent" disabled={busy}>{busy?"Saving...":"Save"}</button>
-        </form>
+          <form onSubmit={onSubmit} className="col" style={{gap: 12}}>
+            <div className="form-split">
+              <div className="field">
+                <label>Booth Type</label>
+                <select value={form.boothType} onChange={e=>setForm({...form, boothType:e.target.value})}>
+                  <option value="small">small</option>
+                  <option value="big">big</option>
+                </select>
+              </div>
+              <div className="field">
+                <label>Amount</label>
+                <input type="number" min={1} value={form.amount} onChange={e=>setForm({...form, amount:e.target.value})} />
+              </div>
+            </div>
+            {error && <div className="error">{error}</div>}
+            <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
+              <button className="btn cta-primary" disabled={busy}>{busy?"Saving...":"Save changes"}</button>
+            </div>
+          </form>
+        </div>
       </div>
     </Protected>
   );
 }
-

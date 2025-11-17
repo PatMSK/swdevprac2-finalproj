@@ -57,25 +57,45 @@ export default function AdminExhibitionsPage() {
 
   return (
     <Protected role={"admin"}>
-      <div className="col" style={{gap: 16}}>
-        <h2>Admin: Exhibitions</h2>
-        {loading && <div className="panel">Loading...</div>}
+      <div className="page-shell">
+        <section className="page-hero">
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h2 style={{ marginBottom: 6 }}>Admin: Exhibitions</h2>
+              <p className="muted" style={{ margin: 0 }}>Create and manage exhibitions for members to book.</p>
+            </div>
+            <div className="badge">Total: {items.length}</div>
+          </div>
+        </section>
+
+        {loading && <div className="card">Loading...</div>}
         {error && <div className="error">{error}</div>}
 
-        <form className="panel grid" onSubmit={create}>
-          <h3 style={{gridColumn: "1/-1"}}>Create Exhibition</h3>
-          <div className="field"><label>Name</label><input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} required /></div>
-          <div className="field"><label>Venue</label><input value={form.venue} onChange={e=>setForm({...form, venue:e.target.value})} required /></div>
-          <div className="field" style={{gridColumn: "1/-1"}}><label>Description</label><textarea rows={3} value={form.description} onChange={e=>setForm({...form, description:e.target.value})} required /></div>
-          <div className="field"><label>Start Date</label><input type="date" value={form.startDate} onChange={e=>setForm({...form, startDate:e.target.value})} required /></div>
-          <div className="field"><label>Duration (days)</label><input type="number" min={1} value={form.durationDay} onChange={e=>setForm({...form, durationDay:e.target.value})} /></div>
-          <div className="field"><label>Small Booth Quota</label><input type="number" min={0} value={form.smallBoothQuota} onChange={e=>setForm({...form, smallBoothQuota:e.target.value})} /></div>
-          <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
-          <div className="field" style={{gridColumn: "1/-1"}}><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
-          <div style={{gridColumn: "1/-1"}}><button className="btn btn-accent" disabled={busy}>{busy?"Creating...":"Create"}</button></div>
+        <form className="card col" style={{ gap: 12 }} onSubmit={create}>
+          <div className="card-header">
+            <div>
+              <h3 className="card-title">Create exhibition</h3>
+              <p className="card-subtitle">Add details, quotas, and schedule.</p>
+            </div>
+          </div>
+          <div className="form-split">
+            <div className="field"><label>Name</label><input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} required /></div>
+            <div className="field"><label>Venue</label><input value={form.venue} onChange={e=>setForm({...form, venue:e.target.value})} required /></div>
+          </div>
+          <div className="field"><label>Description</label><textarea rows={3} value={form.description} onChange={e=>setForm({...form, description:e.target.value})} required /></div>
+          <div className="form-split">
+            <div className="field"><label>Start Date</label><input type="date" value={form.startDate} onChange={e=>setForm({...form, startDate:e.target.value})} required /></div>
+            <div className="field"><label>Duration (days)</label><input type="number" min={1} value={form.durationDay} onChange={e=>setForm({...form, durationDay:e.target.value})} /></div>
+          </div>
+          <div className="form-split">
+            <div className="field"><label>Small Booth Quota</label><input type="number" min={0} value={form.smallBoothQuota} onChange={e=>setForm({...form, smallBoothQuota:e.target.value})} /></div>
+            <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
+          </div>
+          <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
+          <div className="pill-actions" style={{ justifyContent: "flex-end" }}><button className="btn cta-primary" disabled={busy}>{busy?"Creating...":"Create"}</button></div>
         </form>
 
-        <div className="panel">
+        <div className="card table-card">
           <div className="table-responsive">
             <table className="table">
               <thead>
@@ -83,7 +103,7 @@ export default function AdminExhibitionsPage() {
                   <th>Name</th>
                   <th>Venue</th>
                   <th>Start</th>
-                  <th>Actions</th>
+                  <th style={{ textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,9 +112,11 @@ export default function AdminExhibitionsPage() {
                     <td>{ex.name}</td>
                     <td>{ex.venue}</td>
                     <td>{new Date(ex.startDate).toLocaleDateString()}</td>
-                    <td>
-                      <Link className="btn" href={`/admin/exhibitions/${ex._id}`}>Edit</Link>
-                      <button className="btn btn-danger" onClick={() => remove(ex._id)} style={{marginLeft: 8}}>Delete</button>
+                    <td style={{ textAlign: "right" }}>
+                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
+                        <Link className="btn" href={`/admin/exhibitions/${ex._id}`}>Edit</Link>
+                        <button className="btn btn-danger" onClick={() => remove(ex._id)}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -1,12 +1,12 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/AuthContext";
 
 const REQUIRED_FIELDS = ["name", "email", "tel", "password"];
-const labelRowStyle = { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 };
-const errorTextStyle = { color: "#d14343", fontSize: "0.8rem" };
-const submitButtonStyle = { backgroundColor: "#fcead6", color: "#4a2c00", borderColor: "#fcead6" };
+const errorTextStyle = { color: "#dc2626", fontSize: "0.9rem", marginTop: "0", marginBottom: "0" };
+const submitButtonStyle = { backgroundColor: "#fcead6", color: "#030213", borderColor: "#f7c87a", width: "100%" };
 
 const validateField = (field, value) => {
   const trimmed = value.trim();
@@ -86,43 +86,50 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="panel" style={{maxWidth: 640, margin: "24px auto"}}>
-      <h2>Register</h2>
-      <form className="grid" style={{ gridTemplateColumns: "1fr", rowGap: 16 }} onSubmit={onSubmit}>
-        <div className="field">
-          <div style={labelRowStyle}>
+    <div style={{ minHeight: "calc(100vh - 4rem)", display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 16px" }}>
+      <div className="card" style={{ width: "100%", maxWidth: 640 }}>
+        <h2 style={{ textAlign: "center", marginBottom: 18 }}>Register</h2>
+
+        {error && (
+          <div className="panel" style={{ borderColor: "#dc2626", color: "#dc2626", background: "#fef2f2", }}>
+            {String(error)}
+          </div>
+        )}
+
+        <form className="col" style={{ gap: 16 }} onSubmit={onSubmit}>
+          <div className="field">
             <label htmlFor="name">Name</label>
-            {hasSubmitted && fieldErrors.name && <small style={errorTextStyle}>{fieldErrors.name}</small>}
+            <input id="name" value={form.name} onChange={handleChange("name")} placeholder="John Doe" />
+            {hasSubmitted && fieldErrors.name && <p style={errorTextStyle}>{fieldErrors.name}</p>}
           </div>
-          <input id="name" value={form.name} onChange={handleChange("name")} />
-        </div>
-        <div className="field">
-          <div style={labelRowStyle}>
+
+          <div className="field">
             <label htmlFor="email">Email</label>
-            {hasSubmitted && fieldErrors.email && <small style={errorTextStyle}>{fieldErrors.email}</small>}
+            <input id="email" type="email" value={form.email} onChange={handleChange("email")} placeholder="you@example.com" />
+            {hasSubmitted && fieldErrors.email && <p style={errorTextStyle}>{fieldErrors.email}</p>}
           </div>
-          <input id="email" type="email" value={form.email} onChange={handleChange("email")} />
-        </div>
-        <div className="field">
-          <div style={labelRowStyle}>
-            <label htmlFor="tel">Tel</label>
-            {hasSubmitted && fieldErrors.tel && <small style={errorTextStyle}>{fieldErrors.tel}</small>}
+
+          <div className="field">
+            <label htmlFor="tel">Telephone</label>
+            <input id="tel" type="tel" value={form.tel} onChange={handleChange("tel")} placeholder="1234567890" />
+            {hasSubmitted && fieldErrors.tel && <p style={errorTextStyle}>{fieldErrors.tel}</p>}
           </div>
-          <input id="tel" type="tel" value={form.tel} onChange={handleChange("tel")} />
-        </div>
-        {/* Role is fixed to 'member' for public registration — removed ability to request admin */}
-        <div className="field">
-          <div style={labelRowStyle}>
+
+          <div className="field">
             <label htmlFor="password">Password</label>
-            {hasSubmitted && fieldErrors.password && <small style={errorTextStyle}>{fieldErrors.password}</small>}
+            <input id="password" type="password" value={form.password} onChange={handleChange("password")} placeholder="Create a strong password" />
+            {hasSubmitted && fieldErrors.password && <p style={errorTextStyle}>{fieldErrors.password}</p>}
           </div>
-          <input id="password" type="password" value={form.password} onChange={handleChange("password")} />
+
+          <button className="btn"  style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff" }} disabled={busy}>
+            {busy ? "Creating account..." : "Register"}
+          </button>
+        </form>
+
+        <div style={{ marginTop: 16, textAlign: "center" }}>
+          <Link href="/exhibitions" className="muted">← Back to exhibitions</Link>
         </div>
-        {error && <div className="error" style={{gridColumn: "1/-1"}}>{String(error)}</div>}
-        <div style={{gridColumn: "1/-1"}}>
-          <button className="btn btn-accent" style={submitButtonStyle} disabled={busy}>{busy?"Registering...":"Register"}</button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
