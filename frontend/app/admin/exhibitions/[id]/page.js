@@ -79,7 +79,9 @@ export default function AdminEditExhibitionPage() {
           </div>
           <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
           {error && <div className="error">{error}</div>}
-          <div className="pill-actions" style={{ justifyContent: "flex-end" }}><button className="btn cta-primary" disabled={busy}>{busy?"Saving...":"Save changes"}</button></div>
+          <div className="pill-actions" style={{ justifyContent: "flex-end" }}><button className="btn" style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff" }} disabled={busy}>
+                {busy?"Saving...":"Save Changes"}
+              </button></div>
         </form>
       </div>
     </Protected>
