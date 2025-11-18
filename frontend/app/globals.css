@@ -8,6 +8,7 @@
   --danger: #ef4444;
   --border: #1f2937;
   --btn-bg: #000000;
+  --nav-txt: #e5e7eb;
 }
 
 .light {
@@ -20,6 +21,7 @@
   --danger: #ef4444;
   --border: #e5e7eb;
   --btn-bg: #f3f4f6;
+  --nav-txt: #0f172a;
 }
 
 * { box-sizing: border-box; }
@@ -116,7 +118,7 @@ nav .navwrap {
   padding: 8px 4px;
   border-radius: 8px;
   border: 1px solid transparent;
-  color: #e5e7eb;
+  color: --nav-txt;
   background: transparent;
   font-weight: 600;
   transition: color 0.2s ease, transform 0.18s ease;
@@ -280,7 +282,7 @@ nav .navwrap {
 .table-card { overflow: hidden; border-radius: 14px; padding: 0px}
 .table-card table { background: transparent; }
 .table-card thead { background: transparent; }
-.table-actions { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+.table-actions { display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
 .btn-edit {
   background: #1b1b20;
   border-color: #2a2a32;
@@ -344,6 +346,7 @@ nav .navwrap {
 
 @media (max-width: 900px) {
   .container { padding: 16px; }
+  .page-shell { padding: 16px; }
 }
 
 @media (max-width: 768px) {
@@ -370,6 +373,11 @@ nav .navwrap {
   .filter-group label {
     width: 100%;
   }
+  .form-split { grid-template-columns: 1fr; }
+  .section-grid { grid-template-columns: 1fr; }
+  .pill-actions { flex-direction: column; align-items: stretch; }
+  .table-actions { justify-content: flex-start; flex-wrap: wrap; gap: 6px; }
+  .table-responsive .table { min-width: 100%; }
 }
 
 @media (min-width: 769px) {

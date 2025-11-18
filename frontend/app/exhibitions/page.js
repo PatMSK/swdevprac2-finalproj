@@ -146,8 +146,8 @@ export default function ExhibitionsPage() {
               <p className="muted" style={{ margin: "4px 0", fontSize: "0.95rem" }}>
                 {ex.description}
               </p>
-              <div style={{ marginTop: "auto" }}>
-                <Link className="btn cta-primary" style={{ width: "100%", textAlign: "center" }} href={`/exhibitions/${ex._id}`}>
+              <div style={{ marginTop: "auto", width: "100%" }}>
+                <Link className="btn" style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff", display: "block", textAlign: "left" }} href={`/exhibitions/${ex._id}`}>
                   View Details
                 </Link>
               </div>

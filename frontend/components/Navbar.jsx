@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { href: "/exhibitions", label: "Exhibitions", shouldShow: () => true },
   { href: "/login", label: "Login", shouldShow: ({ user }) => !user },
   { href: "/register", label: "Register", shouldShow: ({ user }) => !user },
-  { href: "/bookings", label: "My Bookings", shouldShow: ({ role }) => role === "member" || role === "admin" },
+  { href: "/bookings", label: "My Bookings", shouldShow: ({ role }) => role === "member" },
   { href: "/admin/exhibitions", label: "Admin Exhibitions", shouldShow: ({ role }) => role === "admin" },
   { href: "/admin/bookings", label: "Admin Bookings", shouldShow: ({ role }) => role === "admin" },
 ];

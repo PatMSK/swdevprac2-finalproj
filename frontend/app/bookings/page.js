@@ -33,7 +33,7 @@ export default function MyBookingsPage() {
   };
 
   return (
-    <Protected role={"member"}>
+    <Protected>
       <div className="page-shell">
         <section className="page-hero">
           <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>

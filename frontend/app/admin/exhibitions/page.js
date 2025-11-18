@@ -92,7 +92,7 @@ export default function AdminExhibitionsPage() {
             <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
           </div>
           <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
-          <div className="pill-actions" style={{ justifyContent: "flex-end" }}><button className="btn cta-primary" disabled={busy}>{busy?"Creating...":"Create"}</button></div>
+          <div className="pill-actions"><button className="btn" style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff"}} disabled={busy}>{busy?"Creating...":"Create Exhibition"}</button></div>
         </form>
 
         <div className="card table-card">

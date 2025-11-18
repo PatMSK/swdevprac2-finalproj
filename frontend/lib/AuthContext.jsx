@@ -75,7 +75,19 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    console.warn("useAuth called outside AuthProvider – returning fallback ctxt to avoid crash");
+    return {
+      token: null,
+      user: null,
+      role: null,
+      loading: true,
+      error: null,
+      setError: () => {},
+      login: async () => { throw new Error("AuthProvider missing"); },
+      register: async () => { throw new Error("AuthProvider missing"); },
+      logout: () => {},
+    };
+  }
   return ctx;
 }
-
