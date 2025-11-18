@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "../../../lib/api";
@@ -7,13 +8,14 @@ import { useAuth } from "../../../lib/AuthContext";
 export default function ExhibitionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { token, role } = useAuth();
+  const { token, role, user } = useAuth();
   const id = params?.id;
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState({ boothType: "small", amount: 1 });
   const [busy, setBusy] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -30,11 +32,14 @@ export default function ExhibitionDetailPage() {
 
   const submitBooking = async (e) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(false);
     if (!token) { router.push("/login"); return; }
-    setBusy(true); setError(null);
+    setBusy(true);
     try {
       await api.createBooking(token, { exhibition: id, boothType: booking.boothType, amount: Number(booking.amount) });
-      router.push("/bookings");
+      setSuccess(true);
+      setTimeout(() => router.push("/bookings"), 1200);
     } catch (err) { setError(err.message); }
     finally { setBusy(false); }
   };
@@ -45,62 +50,86 @@ export default function ExhibitionDetailPage() {
 
   return (
     <div className="page-shell">
-      <section className="page-hero">
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <h2 style={{ marginBottom: 6 }}>{data.name}</h2>
-            <p className="muted" style={{ margin: 0 }}>{data.venue}</p>
-          </div>
-          <span className="badge tag-muted">{new Date(data.startDate).toLocaleDateString()}</span>
-        </div>
-        <div className="section-grid" style={{ marginTop: 12 }}>
-          <div className="stat-card">
-            <div className="muted">Duration</div>
-            <strong>{data.durationDay} day(s)</strong>
-          </div>
-          <div className="stat-card">
-            <div className="muted">Small booths</div>
-            <strong>{data.smallBoothQuota}</strong>
-          </div>
-          <div className="stat-card">
-            <div className="muted">Big booths</div>
-            <strong>{data.bigBoothQuota}</strong>
-          </div>
-        </div>
-      </section>
+      <Link href="/exhibitions" className="muted" style={{ marginBottom: 8, display: "inline-flex" }}>
+        ← Back to exhibitions
+      </Link>
 
-      <div className="card">
-        <h3 style={{ marginTop: 0 }}>About this exhibition</h3>
-        <p style={{ marginBottom: 0 }}>{data.description}</p>
+      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+        <div style={{ position: "relative", paddingTop: "42%", background: "#0f172a" }}>
+          {data.posterPicture && (
+            <img
+              src={data.posterPicture}
+              alt={data.name}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+              onError={(e) => { e.target.style.display = "none"; }}
+            />
+          )}
+        </div>
+        <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 10 }}>
+          <h2 style={{ margin: 0 }}>{data.name}</h2>
+          <div className="muted">{data.venue}</div>
+          <div className="muted" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <span>Starts: {new Date(data.startDate).toLocaleDateString()}</span>
+            <span>• Duration: {data.durationDay} day(s)</span>
+          </div>
+          <p className="muted" style={{ margin: "4px 0 0 0", lineHeight: 1.6 }}>{data.description}</p>
+
+          <div className="section-grid" style={{ marginTop: 10 }}>
+            <div className="stat-card">
+              <div className="muted">Small booths</div>
+              <strong>{data.smallBoothQuota}</strong>
+            </div>
+            <div className="stat-card">
+              <div className="muted">Big booths</div>
+              <strong>{data.bigBoothQuota}</strong>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {role === "member" && (
-        <form onSubmit={submitBooking} className="card col" style={{ gap: 12 }}>
-          <div className="card-header">
-            <div>
-              <h3 className="card-title">Create booking</h3>
-              <p className="card-subtitle">Choose your booth type and amount.</p>
-            </div>
-          </div>
-          <div className="form-split">
-            <div className="field">
-              <label>Booth Type</label>
-              <select value={booking.boothType} onChange={e=>setBooking({...booking, boothType:e.target.value})}>
-                <option value="small">small</option>
-                <option value="big">big</option>
-              </select>
-            </div>
-            <div className="field">
-              <label>Amount</label>
-              <input type="number" min={1} value={booking.amount} onChange={e=>setBooking({...booking, amount:e.target.value})} />
-            </div>
-          </div>
+      {role === "member" ? (
+        <div className="card col" style={{ gap: 14 }}>
+          <h3 style={{ margin: 0 }}>Create booking</h3>
+          <p className="muted" style={{ margin: "0 0 6px 0" }}>Choose booth type and amount (max 6 per booking).</p>
+          {success && <div className="success">Booking created! Redirecting...</div>}
           {error && <div className="error">{error}</div>}
-          <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
-            <button className="btn cta-primary" disabled={busy}>{busy?"Submitting...":"Create booking"}</button>
+          <form onSubmit={submitBooking} className="col" style={{ gap: 12 }}>
+            <div className="form-split">
+              <div className="field">
+                <label>Booth Type</label>
+                <select value={booking.boothType} onChange={e=>setBooking({...booking, boothType:e.target.value})}>
+                  <option value="small">Small</option>
+                  <option value="big">Big</option>
+                </select>
+              </div>
+              <div className="field">
+                <label>Amount</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={6}
+                  value={booking.amount}
+                  onChange={e=>setBooking({...booking, amount:e.target.value})}
+                />
+              </div>
+            </div>
+            <button className="btn cta-primary" disabled={busy}>
+              {busy ? "Creating..." : "Create Booking"}
+            </button>
+          </form>
+        </div>
+      ) : !user ? (
+        <div className="card col" style={{ gap: 10, textAlign: "center" }}>
+          <h3 style={{ margin: 0 }}>Login required</h3>
+          <p className="muted" style={{ margin: "0 0 8px 0" }}>
+            Please log in to create a booking for this exhibition.
+          </p>
+          <div className="pill-actions" style={{ justifyContent: "center" }}>
+            <Link className="btn cta-primary" href="/login">Go to Login</Link>
+            <Link className="btn" href="/register">Create account</Link>
           </div>
-        </form>
-      )}
+        </div>
+      ) : null}
     </div>
   );
 }
