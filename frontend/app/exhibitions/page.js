@@ -11,7 +11,7 @@ export default function ExhibitionsPage() {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [startAfter, setStartAfter] = useState("");
-  const [sort, setSort] = useState("startAsc");
+  const [sort, setSort] = useState("date-asc");
 
   useEffect(() => {
     let mounted = true;
@@ -30,93 +30,127 @@ export default function ExhibitionsPage() {
       .filter(ex => {
         if (!search) return true;
         const s = search.toLowerCase();
-        return (ex.name || '').toLowerCase().includes(s) || (ex.venue || '').toLowerCase().includes(s);
+        return (ex.name || "").toLowerCase().includes(s) || (ex.venue || "").toLowerCase().includes(s);
       })
       .filter(ex => {
         if (!startAfter) return true;
         try {
-          const exDate = new Date(ex.startDate);
-          const after = new Date(startAfter);
-          return exDate >= after;
+          return new Date(ex.startDate) >= new Date(startAfter);
         } catch { return true; }
       })
-      .sort((a,b) => {
-        if (sort === 'startAsc') return new Date(a.startDate) - new Date(b.startDate);
-        if (sort === 'startDesc') return new Date(b.startDate) - new Date(a.startDate);
-        if (sort === 'nameAsc') return (a.name || '').localeCompare(b.name || '');
+      .sort((a, b) => {
+        if (sort === "date-asc") return new Date(a.startDate) - new Date(b.startDate);
+        if (sort === "date-desc") return new Date(b.startDate) - new Date(a.startDate);
+        if (sort === "name-asc") return (a.name || "").localeCompare(b.name || "");
         return 0;
       });
   }, [items, search, startAfter, sort]);
 
-  const upcomingCount = items.filter(ex => new Date(ex.startDate) >= new Date()).length;
+  const resetFilters = () => {
+    setSearch("");
+    setStartAfter("");
+    setSort("date-asc");
+  };
 
   return (
     <div className="page-shell">
-      <section className="page-hero">
-        <div className="row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <h2 style={{ marginBottom: 8 }}>Exhibitions</h2>
-            <p className="muted" style={{ margin: 0 }}>
-              Discover upcoming exhibitions and reserve your booth instantly.
-            </p>
-          </div>
-          {role === "admin" && <Link className="btn btn-ghost" href="/admin/exhibitions">Admin manage</Link>}
-        </div>
-        <div className="section-grid" style={{ marginTop: 12 }}>
-          <div className="stat-card">
-            <div className="muted">Total exhibitions</div>
-            <strong>{items.length}</strong>
-          </div>
-          <div className="stat-card">
-            <div className="muted">Upcoming</div>
-            <strong>{upcomingCount}</strong>
-          </div>
-        </div>
-      </section>
+      <div className="row" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <h2 style={{ margin: 0 }}>Exhibitions</h2>
+        {role === "admin" && (
+          <Link href="/admin/exhibitions" className="btn btn-ghost" style={{ gap: 6 }}>
+            Admin Panel
+          </Link>
+        )}
+      </div>
 
       <div className="card">
         <div className="filter-bar" style={{ gap: 12 }}>
-          <input
-            className="filter-input"
-            aria-label="search"
-            placeholder="Search by name or venue"
-            value={search}
-            onChange={e=>setSearch(e.target.value)}
-          />
-          <div className="filter-group">
-            <label className="muted">Start after</label>
-            <input className="filter-select" type="date" value={startAfter} onChange={e=>setStartAfter(e.target.value)} />
+          <div className="col" style={{ flex: 1 }}>
+            <label className="muted" style={{ fontSize: "0.9rem" }}>Search</label>
+            <input
+              className="filter-input"
+              placeholder="Name or venue..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-          <div className="filter-group">
-            <label className="muted">Sort</label>
-            <select className="filter-select" value={sort} onChange={e=>setSort(e.target.value)}>
-              <option value="startAsc">Start date ↑</option>
-              <option value="startDesc">Start date ↓</option>
-              <option value="nameAsc">Name A→Z</option>
+          <div className="col" style={{ minWidth: 180 }}>
+            <label className="muted" style={{ fontSize: "0.9rem" }}>Start Date From</label>
+            <input
+              className="filter-select"
+              type="date"
+              value={startAfter}
+              onChange={(e) => setStartAfter(e.target.value)}
+            />
+          </div>
+          <div className="col" style={{ minWidth: 180 }}>
+            <label className="muted" style={{ fontSize: "0.9rem" }}>Sort By</label>
+            <select
+              className="filter-select"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+            >
+              <option value="date-asc">Start date ↑</option>
+              <option value="date-desc">Start date ↓</option>
+              <option value="name-asc">Name A-Z</option>
             </select>
           </div>
-          <button className="btn" onClick={()=>{ setSearch(''); setStartAfter(''); setSort('startAsc'); }}>Reset</button>
+          <button className="btn" onClick={resetFilters} style={{ alignSelf: "flex-end" }}>
+            Reset
+          </button>
         </div>
       </div>
 
       {loading && <div className="card">Loading exhibitions...</div>}
       {error && <div className="error">{error}</div>}
 
+      {!loading && !error && filtered.length === 0 && (
+        <div className="card" style={{ textAlign: "center" }}>
+          <p className="muted">No exhibitions found</p>
+        </div>
+      )}
+
       <div className="section-grid">
         {filtered.map((ex) => (
-          <div key={ex._id} className="card col" style={{ gap: 10 }}>
-            <div className="card-header">
-              <div>
-                <h3 style={{ margin: 0 }}>{ex.name}</h3>
-                <div className="card-subtitle">{ex.venue}</div>
-              </div>
-              <span className="badge tag-muted">{new Date(ex.startDate).toLocaleDateString()}</span>
+          <div
+            key={ex._id}
+            className="card"
+            style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}
+          >
+            <div
+              style={{
+                position: "relative",
+                paddingTop: "56%",
+                background: "#0f172a",
+                overflow: "hidden"
+              }}
+            >
+              {ex.posterPicture ? (
+                <img
+                  src={ex.posterPicture}
+                  alt={ex.name}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                  onError={(e) => { e.target.style.display = "none"; }}
+                />
+              ) : null}
             </div>
-            <div className="muted">Duration: {ex.durationDay} day(s)</div>
-            <p style={{ minHeight: 40 }}>{ex.description}</p>
-            <div className="pill-actions" style={{ justifyContent: "space-between" }}>
-              <div className="badge">Small: {ex.smallBoothQuota} · Big: {ex.bigBoothQuota}</div>
-              <Link className="btn cta-primary" href={`/exhibitions/${ex._id}`}>View details</Link>
+            <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+              <h3 style={{ margin: "0 0 4px 0" }}>{ex.name}</h3>
+              <div className="muted" style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <span>{ex.venue}</span>
+              </div>
+              <div className="muted" style={{ display: "flex", gap: 12, alignItems: "center", fontSize: "0.95rem" }}>
+                <span>{new Date(ex.startDate).toLocaleDateString()}</span>
+                <span>• {ex.durationDay} day(s)</span>
+              </div>
+              <p className="muted" style={{ margin: "4px 0", fontSize: "0.95rem" }}>
+                {ex.description}
+              </p>
+              <div style={{ marginTop: "auto" }}>
+                <Link className="btn cta-primary" style={{ width: "100%", textAlign: "center" }} href={`/exhibitions/${ex._id}`}>
+                  View Details
+                </Link>
+              </div>
             </div>
           </div>
         ))}
