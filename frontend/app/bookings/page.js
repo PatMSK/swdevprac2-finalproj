@@ -71,9 +71,12 @@ export default function MyBookingsPage() {
                     <td>{b.boothType}</td>
                     <td>{b.amount}</td>
                     <td style={{ textAlign: "right" }}>
-                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
-                        <Link className="btn" href={`/bookings/${b._id}`}>Edit</Link>
-                        <button className="btn btn-danger" onClick={() => remove(b._id)}>Delete</button>
+                      <div className="table-actions">
+                        <Link className="btn btn-edit" href={`/bookings/${b._id}`}>
+                          <span aria-hidden>✎</span>
+                          Edit
+                        </Link>
+                        <button className="btn btn-delete" onClick={() => remove(b._id)}>🗑 Delete</button>
                       </div>
                     </td>
                   </tr>

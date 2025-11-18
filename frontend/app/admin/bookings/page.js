@@ -62,9 +62,15 @@ export default function AdminBookingsPage() {
                     <td>{b.boothType}</td>
                     <td>{b.amount}</td>
                     <td style={{ textAlign: "right" }}>
-                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
-                        <a className="btn" href={`/bookings/${b._id}`}>Edit</a>
-                        <button className="btn btn-danger" onClick={() => remove(b._id)}>Delete</button>
+                      <div className="table-actions">
+                        <a className="btn btn-edit" href={`/bookings/${b._id}`}>
+                          <span aria-hidden>✎</span>
+                          Edit
+                        </a>
+                        <button className="btn btn-delete" onClick={() => remove(b._id)}>
+                          <span aria-hidden>🗑</span>
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>
