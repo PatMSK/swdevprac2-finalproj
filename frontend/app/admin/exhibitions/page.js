@@ -113,9 +113,15 @@ export default function AdminExhibitionsPage() {
                     <td>{ex.venue}</td>
                     <td>{new Date(ex.startDate).toLocaleDateString()}</td>
                     <td style={{ textAlign: "right" }}>
-                      <div className="pill-actions" style={{ justifyContent: "flex-end" }}>
-                        <Link className="btn" href={`/admin/exhibitions/${ex._id}`}>Edit</Link>
-                        <button className="btn btn-danger" onClick={() => remove(ex._id)}>Delete</button>
+                      <div className="table-actions">
+                        <Link className="btn btn-edit" href={`/admin/exhibitions/${ex._id}`}>
+                          <span aria-hidden>✎</span>
+                          Edit
+                        </Link>
+                        <button className="btn btn-delete" onClick={() => remove(ex._id)}>
+                          <span aria-hidden>🗑</span>
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>

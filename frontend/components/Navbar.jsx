@@ -58,12 +58,13 @@ export default function Navbar() {
         <div className="nav-actions">
           {user && (
             <div className="nav-user desktop-only">
-              <span className="muted">Hello,</span>
-              <strong>{user?.name}</strong>
-              <button className="btn btn-ghost" onClick={handleLogout}>
-                Logout
-              </button>
+              <h>hello, {user?.name}</h>
             </div>
+          )}
+          {user && (
+            <button className="btn btn-ghost desktop-only" onClick={handleLogout}>
+              Logout
+            </button>
           )}
           <ThemeToggle />
           <button
@@ -104,4 +105,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
