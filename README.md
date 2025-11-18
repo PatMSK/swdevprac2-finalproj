@@ -46,12 +46,12 @@ Notes
 - [X] User Create Booking/Request/Order
 - [ ] Check Create Condition 
 - [X] User View Own Booking/Request/Order
-- [ ] User Edit Own Booking/Request/Order
-- [ ] User Delete Own Booking/Request/Order
+- [X] User Edit Own Booking/Request/Order
+- [X] User Delete Own Booking/Request/Order
 - [X] User Log-out 
 - [X] Admin Log-in
-- [ ] Admin View Any Booking
-- [ ] Admin Edit Any Booking 
+- [X] Admin View Any Booking
+- [X] Admin Edit Any Booking 
 - [X] Admin Delete Any Booking 
 - [X] Admin Create New Product/Item
 - [ ] Deploy
