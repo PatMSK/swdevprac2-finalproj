@@ -57,6 +57,14 @@ exports.createExhibition = async (req, res) => {
     });
   }
 
+  // Require poster image for new exhibitions
+  if (!posterPicture || String(posterPicture).trim() === '') {
+    return res.status(400).json({
+      success: false,
+      message: 'Poster image is required for an exhibition (posterPicture)'
+    });
+  }
+
   const exhibition = await Exhibition.create({ 
     name,
     description, 

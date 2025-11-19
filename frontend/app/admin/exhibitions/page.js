@@ -38,6 +38,12 @@ export default function AdminExhibitionsPage() {
   const create = async (e) => {
     e.preventDefault();
     setBusy(true); setError(null);
+    // Require posterPicture on the client as well for better UX
+    if (!form.posterPicture || String(form.posterPicture).trim() === "") {
+      setError('Poster picture URL is required');
+      setBusy(false);
+      return;
+    }
     try {
       await api.createExhibition(token, {
         ...form,
@@ -91,7 +97,7 @@ export default function AdminExhibitionsPage() {
             <div className="field"><label>Small Booth Quota</label><input type="number" min={0} value={form.smallBoothQuota} onChange={e=>setForm({...form, smallBoothQuota:e.target.value})} /></div>
             <div className="field"><label>Big Booth Quota</label><input type="number" min={0} value={form.bigBoothQuota} onChange={e=>setForm({...form, bigBoothQuota:e.target.value})} /></div>
           </div>
-          <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} /></div>
+          <div className="field"><label>Poster Picture URL</label><input value={form.posterPicture} onChange={e=>setForm({...form, posterPicture:e.target.value})} required /></div>
           <div className="pill-actions"><button className="btn" style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff"}} disabled={busy}>{busy?"Creating...":"Create Exhibition"}</button></div>
         </form>
 
@@ -131,11 +137,11 @@ export default function AdminExhibitionsPage() {
                     <td style={{ textAlign: "right" }}>
                       <div className="table-actions">
                         <Link className="btn btn-edit" href={`/admin/exhibitions/${ex._id}`}>
-                          <span aria-hidden>✎</span>
+                          <span aria-hidden>✏️</span>
                           Edit
                         </Link>
                         <button className="btn btn-delete" onClick={() => remove(ex._id)}>
-                          <span aria-hidden>🗑</span>
+                          <span aria-hidden>🗑️</span>
                           Delete
                         </button>
                       </div>
