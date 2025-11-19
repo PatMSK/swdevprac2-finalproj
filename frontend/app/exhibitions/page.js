@@ -117,11 +117,11 @@ export default function ExhibitionsPage() {
             className="card"
             style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}
           >
-            <div
+              <div
               style={{
                 position: "relative",
                 paddingTop: "56%",
-                background: "#0f172a",
+                background: "var(--panel)",
                 overflow: "hidden"
               }}
             >
@@ -134,16 +134,35 @@ export default function ExhibitionsPage() {
                 />
               ) : null}
             </div>
-            <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+              <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
               <h3 style={{ margin: "0 0 4px 0" }}>{ex.name}</h3>
               <div className="muted" style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <span aria-hidden>
+                  <svg className="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                    <path d="M12 21s8-5.333 8-11a8 8 0 10-16 0c0 5.667 8 11 8 11z" />
+                    <circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                </span>
                 <span>{ex.venue}</span>
               </div>
               <div className="muted" style={{ display: "flex", gap: 12, alignItems: "center", fontSize: "0.95rem" }}>
-                <span>{new Date(ex.startDate).toLocaleDateString()}</span>
-                <span>• {ex.durationDay} day(s)</span>
+                <span style={{ display: "inline-flex", alignItems: "center" }}>
+                  <svg className="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <path d="M16 2v4M8 2v4M3 10h18" />
+                  </svg>
+                  {new Date(ex.startDate).toLocaleDateString()}
+                </span>
+                <span style={{ margin: "0 6px" }}>•</span>
+                <span style={{ display: "inline-flex", alignItems: "center" }}>
+                  <svg className="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 2" />
+                  </svg>
+                  {ex.durationDay} day(s)
+                </span>
               </div>
-              <p className="muted" style={{ margin: "4px 0", fontSize: "0.95rem" }}>
+              <p className="muted card-desc" style={{ margin: "4px 0", fontSize: "0.95rem" }}>
                 {ex.description}
               </p>
               <div style={{ marginTop: "auto", width: "100%" }}>

@@ -110,8 +110,24 @@ export default function AdminExhibitionsPage() {
                 {items.map(ex => (
                   <tr key={ex._id}>
                     <td>{ex.name}</td>
-                    <td>{ex.venue}</td>
-                    <td>{new Date(ex.startDate).toLocaleDateString()}</td>
+                    <td>
+                      <span aria-hidden style={{ display: "inline-flex", alignItems: "center" }}>
+                        <svg className="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 21s8-5.333 8-11a8 8 0 10-16 0c0 5.667 8 11 8 11z" />
+                          <circle cx="12" cy="10" r="2.5" />
+                        </svg>
+                      </span>
+                      {ex.venue}
+                    </td>
+                    <td>
+                      <span aria-hidden style={{ display: "inline-flex", alignItems: "center" }}>
+                        <svg className="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" />
+                          <path d="M16 2v4M8 2v4M3 10h18" />
+                        </svg>
+                      </span>
+                      {new Date(ex.startDate).toLocaleDateString()}
+                    </td>
                     <td style={{ textAlign: "right" }}>
                       <div className="table-actions">
                         <Link className="btn btn-edit" href={`/admin/exhibitions/${ex._id}`}>

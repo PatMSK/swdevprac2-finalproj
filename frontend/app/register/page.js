@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/AuthContext";
 
-const REQUIRED_FIELDS = ["name", "email", "tel", "password"];
-const errorTextStyle = { color: "#dc2626", fontSize: "0.9rem", marginTop: "0", marginBottom: "0" };
+const REQUIRED_FIELDS = ["name", "email", "tel", "password", "confirmPassword"];
+const errorTextStyle = { color: "var(--danger)", fontSize: "0.9rem", marginTop: "0", marginBottom: "0" };
 const submitButtonStyle = { backgroundColor: "#fcead6", color: "#030213", borderColor: "#f7c87a", width: "100%" };
 
 const validateField = (field, value) => {
@@ -35,7 +35,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { register, setError, error } = useAuth();
   // Keep role fixed to 'member' on the client — admin assignment must be done server-side by admins only
-  const [form, setForm] = useState({ name: "", email: "", tel: "", role: "member", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", tel: "", role: "member", password: "", confirmPassword: "" });
   const [busy, setBusy] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -65,6 +65,10 @@ export default function RegisterPage() {
         nextErrors[field] = fieldError;
       }
     });
+    // Check password match
+    if (form.password && form.confirmPassword && form.password !== form.confirmPassword) {
+      nextErrors.confirmPassword = "Passwords do not match";
+    }
     setFieldErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -78,7 +82,10 @@ export default function RegisterPage() {
     }
     setBusy(true);
     try {
-      await register(form);
+      // Don't send confirmPassword to the API
+      const payload = { ...form };
+      delete payload.confirmPassword;
+      await register(payload);
       router.push("/exhibitions");
     } catch (err) {
       setError(err.message);
@@ -91,7 +98,7 @@ export default function RegisterPage() {
         <h2 style={{ textAlign: "center", marginBottom: 18 }}>Register</h2>
 
         {error && (
-          <div className="panel" style={{ borderColor: "#dc2626", color: "#dc2626", background: "#fef2f2", }}>
+          <div className="panel" style={{ borderColor: "var(--danger)", color: "var(--danger)", background: "color-mix(in srgb, var(--danger) 8%, var(--panel))", }}>
             {String(error)}
           </div>
         )}
@@ -99,7 +106,7 @@ export default function RegisterPage() {
         <form className="col" style={{ gap: 16 }} onSubmit={onSubmit}>
           <div className="field">
             <label htmlFor="name">Name</label>
-            <input id="name" value={form.name} onChange={handleChange("name")} placeholder="John Doe" />
+            <input id="name" value={form.name} onChange={handleChange("name")} placeholder="Peace Peace" />
             {hasSubmitted && fieldErrors.name && <p style={errorTextStyle}>{fieldErrors.name}</p>}
           </div>
 
@@ -111,7 +118,7 @@ export default function RegisterPage() {
 
           <div className="field">
             <label htmlFor="tel">Telephone</label>
-            <input id="tel" type="tel" value={form.tel} onChange={handleChange("tel")} placeholder="1234567890" />
+            <input id="tel" type="tel" value={form.tel} onChange={handleChange("tel")} placeholder="0123456789" />
             {hasSubmitted && fieldErrors.tel && <p style={errorTextStyle}>{fieldErrors.tel}</p>}
           </div>
 
@@ -121,7 +128,13 @@ export default function RegisterPage() {
             {hasSubmitted && fieldErrors.password && <p style={errorTextStyle}>{fieldErrors.password}</p>}
           </div>
 
-          <button className="btn"  style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff" }} disabled={busy}>
+          <div className="field">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange("confirmPassword")} placeholder="Enter your password again" />
+            {hasSubmitted && fieldErrors.confirmPassword && <p style={errorTextStyle}>{fieldErrors.confirmPassword}</p>}
+          </div>
+
+          <button className="btn"  style={{ marginTop: 12, backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff" }} disabled={busy}>
             {busy ? "Creating account..." : "Register"}
           </button>
         </form>

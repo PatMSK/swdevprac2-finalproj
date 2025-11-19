@@ -56,6 +56,8 @@ export default function EditBookingPage() {
     setBusy(true); setError(null);
     try {
       await api.updateBooking(token, id, { boothType: form.boothType, amount: Number(form.amount) });
+      try { window.dispatchEvent(new CustomEvent('bookings:changed')); } catch (e) {}
+      try { localStorage.setItem('bookings:changed', Date.now().toString()); } catch (e) {}
       router.push(role === "admin" ? "/admin/bookings" : "/bookings");
     } catch (err) { setError(err.message); } finally { setBusy(false); }
   };

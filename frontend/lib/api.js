@@ -15,7 +15,11 @@ async function request(path, { method = "GET", body, token, headers } = {}) {
   const data = text ? JSON.parse(text) : {};
   if (!res.ok) {
     const msg = data?.error || data?.message || res.statusText;
-    throw new Error(msg);
+    const err = new Error(msg);
+    // attach status and body for callers that want to inspect
+    err.status = res.status;
+    err.data = data;
+    throw err;
   }
   return data;
 }

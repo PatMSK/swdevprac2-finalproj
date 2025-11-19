@@ -45,7 +45,7 @@ export default function LoginPage() {
           </div>
           <button
             className="btn"
-            style={{ backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff"}}
+            style={{ marginTop: 12, backgroundColor: "#2563eb", borderColor: "#1d4ed8", color: "#fff"}}
             disabled={busy}
           >
             {busy ? "Logging in..." : "Login"}

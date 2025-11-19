@@ -27,8 +27,50 @@ export default function MyBookingsPage() {
   const remove = async (id) => {
     if (!confirm("Delete this booking?")) return;
     try {
+      // fetch booking details so we know which exhibition/booth to adjust
+      let booking = null;
+      try {
+        const res = await api.getBooking(token, id);
+        booking = res?.data || res;
+      } catch (e) {
+        // best-effort: continue even if we couldn't fetch booking details
+        booking = null;
+      }
+
       await api.deleteBooking(token, id);
+
+      // attempt to update exhibition slot counts (best-effort, non-blocking)
+      try {
+        const exhId = booking?.exhibition?._id || booking?.exhibition?.id || booking?.exhibition;
+        const amount = Number(booking?.amount || 0) || 0;
+        const type = booking?.boothType;
+        if (exhId && amount > 0 && type) {
+          const r = await api.getExhibition(exhId);
+          const ex = r?.data || r || {};
+          const payload = {};
+          if (type === "small") {
+            const cur = ex?.smallBoothTaken ?? ex?.smallBoothBooked ?? ex?.smallBooked ?? 0;
+            payload.smallBoothTaken = Math.max(0, cur - amount);
+            if (typeof ex.smallBoothBooked !== "undefined") payload.smallBoothBooked = Math.max(0, (ex.smallBoothBooked ?? cur) - amount);
+            if (typeof ex.smallBooked !== "undefined") payload.smallBooked = Math.max(0, (ex.smallBooked ?? cur) - amount);
+          } else if (type === "big") {
+            const cur = ex?.bigBoothTaken ?? ex?.bigBoothBooked ?? ex?.bigBooked ?? 0;
+            payload.bigBoothTaken = Math.max(0, cur - amount);
+            if (typeof ex.bigBoothBooked !== "undefined") payload.bigBoothBooked = Math.max(0, (ex.bigBoothBooked ?? cur) - amount);
+            if (typeof ex.bigBooked !== "undefined") payload.bigBooked = Math.max(0, (ex.bigBooked ?? cur) - amount);
+          }
+          // only call update if we have something to update
+          if (Object.keys(payload).length) {
+            try { await api.updateExhibition(token, exhId, payload); } catch (e) { console.warn('updateExhibition failed', e); }
+          }
+        }
+      } catch (e) {
+        console.warn('failed to adjust exhibition slots after delete', e);
+      }
+
       setItems(items.filter(b => b._id !== id));
+      try { window.dispatchEvent(new CustomEvent('bookings:changed')); } catch (e) {}
+      try { localStorage.setItem('bookings:changed', Date.now().toString()); } catch (e) {}
     } catch (err) { alert(err.message); }
   };
 
