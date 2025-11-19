@@ -175,13 +175,13 @@ export default function ExhibitionDetailPage() {
                   <div className="muted" style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     <div>Small booths</div>
                   </div>
-                  <strong>Available: {smallAvailable}/{data.smallBoothQuota || 0}</strong>
+                    <strong>Available: {data.smallBoothQuota || 0}</strong>
                 </div>
                 <div className="stat-card">
                   <div className="muted" style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     <div>Big booths</div>
                   </div>
-                  <strong>Available: {bigAvailable}/{data.bigBoothQuota || 0}</strong>
+                    <strong>Available: {data.bigBoothQuota || 0}</strong>
                 </div>
               </div>
             </div>

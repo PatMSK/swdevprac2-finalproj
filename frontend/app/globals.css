@@ -278,6 +278,9 @@ nav .navwrap {
   border-radius: 12px;
   background: color-mix(in srgb, var(--panel) 94%, transparent);
 }
+/* Add spacing between the stat label and the value for readability */
+.stat-card .muted { margin-bottom: 8px; }
+.stat-card strong { margin-top: 6px; display: block; font-size: 1.05rem; }
 .badge {
   display: inline-flex;
   align-items: center;
